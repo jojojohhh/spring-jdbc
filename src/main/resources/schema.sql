@@ -1,10 +1,23 @@
 CREATE TABLE USER(
-    ID INTEGER NOT NULL AUTO_INCREMENT,
-    ACCOUNT VARCHAR(128) NOT NULL UNIQUE,
-    PASSWORD VARCHAR(128) NOT NULL,
-    NAME VARCHAR(128) NOT NULL,
-    ADDRESS VARCHAR(128) NOT NULL,
-    PHONE_NO VARCHAR(16) NOT NULL,
-    EMAIL VARCHAR(128) NOT NULL,
+    id integer not null auto_increment,
+    account varchar(128) not null, unique,
+    password varchar(128) not null,
+    name varchar(128) not null,
+    address varchar(128) not null,
+    phone_no varchar(16) not null,
+    email varchar(128) not null,
+    birth date not null,
     primary key (id)
+);
+
+create table item(
+    id integer not null auto_increment,
+    name varchar(128) not null,
+    price integer not null
+);
+
+create table cart(
+    id integer not null auto_increment,
+    name varchar(128) not null,
+    add_date date not null
 );
