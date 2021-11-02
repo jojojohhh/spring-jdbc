@@ -27,16 +27,17 @@ public class JdbcUserRepository implements UserRepository{
             rs.getString("address"),
             rs.getString("phone_no"),
             rs.getString("email"),
-            rs.getDate("birth")
+            rs.getDate("birth"),
+            User.UserRole.findByUserRole(rs.getString("role"))
     );
 
     @Override
-    public Optional<User> findById(Long id) {
-        return jdbcTemplate.query(
+    public Optional<User> findById(Long id) throws Exception {
+        return Optional.ofNullable(jdbcTemplate.query(
                 "SELECT * FROM USER WHERE ID = ?",
                 userRowMapper,
                 id
-        ).stream().findAny();
+        ).stream().findAny().orElseThrow(() -> new Exception("exception")));
     }
 
     @Override
@@ -56,5 +57,14 @@ public class JdbcUserRepository implements UserRepository{
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
         user.setId(key.longValue());
         return Optional.of(user);
+    }
+
+    @Override
+    public Optional<User> findByAccount(String account) throws Exception {
+        return Optional.ofNullable(jdbcTemplate.query(
+                "SELECT * FROM USER WHERE ACCOUNT = ?",
+                userRowMapper,
+                account
+        ).stream().findAny().orElseThrow(() -> new Exception("exception")));
     }
 }
