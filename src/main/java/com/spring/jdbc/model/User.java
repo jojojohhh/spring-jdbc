@@ -2,12 +2,14 @@ package com.spring.jdbc.model;
 
 import lombok.*;
 
-import java.util.Date;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 @Getter @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class User {
     private Long id;
     private String account;
@@ -17,6 +19,8 @@ public class User {
     private String phoneNo;
     private String email;
     private Date birth;
+    private Timestamp createAt;
+    private Timestamp passwordUpdateAt;
     private UserRole role;
 
     public enum UserRole {

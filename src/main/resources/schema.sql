@@ -13,7 +13,9 @@ create table user(
     address varchar(255) not null,
     phone_no varchar(16) not null,
     email varchar(128) not null,
-    birth date not null,
+    birth date,
+    create_at datetime default now(),
+    password_update_at datetime default now(),
     role enum('ROLE_USER', 'ROLE_ADMIN'),
     primary key (id)
 );

@@ -2,14 +2,14 @@ package com.spring.jdbc.service;
 
 import com.spring.jdbc.model.User;
 import com.spring.jdbc.repository.JdbcUserRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserService {
 
     private final JdbcUserRepository jdbcUserRepository;

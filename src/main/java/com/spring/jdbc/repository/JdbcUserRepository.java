@@ -1,20 +1,21 @@
 package com.spring.jdbc.repository;
 
 import com.spring.jdbc.model.User;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 @Repository
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class JdbcUserRepository implements UserRepository{
 
     private final JdbcTemplate jdbcTemplate;
@@ -28,6 +29,8 @@ public class JdbcUserRepository implements UserRepository{
             rs.getString("phone_no"),
             rs.getString("email"),
             rs.getDate("birth"),
+            rs.getTimestamp("create_at"),
+            rs.getTimestamp("password_update_at"),
             User.UserRole.findByUserRole(rs.getString("role"))
     );
 
@@ -53,7 +56,16 @@ public class JdbcUserRepository implements UserRepository{
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("user").usingGeneratedKeyColumns("id");
         Map<String, Object> parameters = new HashMap<>();
+        parameters.put("account", user.getAccount());
+        parameters.put("password", user.getPassword());
         parameters.put("name", user.getName());
+        parameters.put("address", user.getAddress());
+        parameters.put("phone_no", user.getPhoneNo());
+        parameters.put("email", user.getEmail());
+        parameters.put("birth", user.getBirth());
+        parameters.put("role", user.getRole());
+        parameters.put("create_at", new Timestamp(System.currentTimeMillis()));
+        parameters.put("password_update_at", new Timestamp(System.currentTimeMillis()));
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
         user.setId(key.longValue());
         return Optional.of(user);
@@ -61,10 +73,10 @@ public class JdbcUserRepository implements UserRepository{
 
     @Override
     public Optional<User> findByAccount(String account) throws Exception {
-        return Optional.ofNullable(jdbcTemplate.query(
+        return jdbcTemplate.query(
                 "SELECT * FROM USER WHERE ACCOUNT = ?",
                 userRowMapper,
                 account
-        ).stream().findAny().orElseThrow(() -> new Exception("exception")));
+        ).stream().findAny();
     }
 }

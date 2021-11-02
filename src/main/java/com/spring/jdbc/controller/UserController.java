@@ -2,17 +2,15 @@ package com.spring.jdbc.controller;
 
 import com.spring.jdbc.model.User;
 import com.spring.jdbc.service.UserService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
@@ -28,14 +26,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/user", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public Map<String, Object> join(@RequestBody User user) throws Exception {
-        Map<String, Object> response = new HashMap<>();
-
-        if (userService.findByAccount(user.getAccount()).isPresent()) {
-            response.put("duplication", true);
-        } else {
-            response.put("success", userService.join(user) != null ? true : false);
-        }
-        return response;
+    public User join(@RequestBody User user) throws Exception {
+        return !userService.findByAccount(user.getAccount()).isPresent() ? userService.join(user).get() : user;
     }
 }
