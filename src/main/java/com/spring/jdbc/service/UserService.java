@@ -2,7 +2,9 @@ package com.spring.jdbc.service;
 
 import com.spring.jdbc.model.User;
 import com.spring.jdbc.repository.JdbcUserRepository;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

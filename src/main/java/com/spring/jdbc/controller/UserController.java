@@ -2,7 +2,9 @@ package com.spring.jdbc.controller;
 
 import com.spring.jdbc.model.User;
 import com.spring.jdbc.service.UserService;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
