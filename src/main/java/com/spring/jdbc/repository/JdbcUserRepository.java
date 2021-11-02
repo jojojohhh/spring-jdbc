@@ -4,14 +4,57 @@ import com.spring.jdbc.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 @Repository
 @AllArgsConstructor
-public class JdbcUserRepository {
+public class JdbcUserRepository implements UserRepository{
 
     private final JdbcTemplate jdbcTemplate;
 
+    static RowMapper<User> userRowMapper = (rs, rowNum) -> new User(
+            rs.getLong("id"),
+            rs.getString("account"),
+            rs.getString("password"),
+            rs.getString("name"),
+            rs.getString("address"),
+            rs.getString("phone_no"),
+            rs.getString("email"),
+            rs.getDate("birth")
+    );
 
-    static RowMapper<User> userRowMapper = (rs, rowNum) -> new User();
+    @Override
+    public Optional<User> findById(Long id) {
+        return jdbcTemplate.query(
+                "SELECT * FROM USER WHERE ID = ?",
+                userRowMapper,
+                id
+        ).stream().findAny();
+    }
+
+    @Override
+    public Stream<User> findAll() {
+        return jdbcTemplate.query(
+                "SELECT * FROM USER",
+                userRowMapper
+        ).stream();
+    }
+
+    @Override
+    public Optional<User> save(User user) {
+        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
+        jdbcInsert.withTableName("user").usingGeneratedKeyColumns("id");
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("name", user.getName());
+        Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
+        user.setId(key.longValue());
+        return Optional.of(user);
+    }
 }

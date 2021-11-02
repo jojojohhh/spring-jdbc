@@ -6,7 +6,7 @@ drop table if exists order_product;
 drop table if exists review;
 
 create table user(
-    id integer not null auto_increment,
+    id long not null auto_increment,
     account varchar(255) not null unique,
     password varchar(128) not null,
     name varchar(128) not null,
@@ -18,7 +18,7 @@ create table user(
 );
 
 create table product(
-    id integer not null auto_increment,
+    id long not null auto_increment,
     name varchar(128) not null,
     price integer not null,
     stock integer not null,
@@ -26,9 +26,9 @@ create table product(
 );
 
 create table cart(
-    id integer not null auto_increment,
-    user_id integer,
-    product_id integer,
+    id long not null auto_increment,
+    user_id long,
+    product_id long,
     product_quantity integer default 1,
     primary key (id),
     foreign key (user_id) references user (id),
@@ -36,8 +36,8 @@ create table cart(
 );
 
 create table `order`(
-  id integer not null auto_increment,
-  user_id integer not null,
+  id long not null auto_increment,
+  user_id long not null,
   amount integer,
   shipping_address varchar(255),
   recipient varchar(100),
@@ -49,9 +49,9 @@ create table `order`(
 );
 
 create table order_product(
-    id integer not null auto_increment,
-    order_id integer,
-    product_id integer,
+    id long not null auto_increment,
+    order_id long,
+    product_id long,
     product_quantity integer default 1,
     primary key (id),
     foreign key (order_id) references `order` (id),
@@ -59,9 +59,9 @@ create table order_product(
 );
 
 create table review(
-    id integer not null auto_increment,
-    order_id integer,
-    product_id integer,
+    id long not null auto_increment,
+    order_id long,
+    product_id long,
     title varchar(255),
     content varchar(5000),
     date date,
