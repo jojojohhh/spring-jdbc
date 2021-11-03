@@ -6,7 +6,14 @@ import lombok.*;
 @Setter
 @ToString
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class ProductCategory {
+    private Long id;
+    private String name;
+    private ProductCategory categoryParent;
+
+    public ProductCategory(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

@@ -2,6 +2,7 @@ drop table if exists review;
 drop table if exists order_product;
 drop table if exists `order`;
 drop table if exists cart;
+drop table if exists product_category;
 drop table if exists product;
 drop table if exists user;
 
@@ -21,7 +22,7 @@ create table user(
 );
 
 create table product_category(
-  id bigint not null auto_increment,
+  id bigint not null,
   name varchar(128) not null,
   category_parent bigint,
   primary key (id),
@@ -29,7 +30,7 @@ create table product_category(
 );
 
 create table product(
-    id bigint not null,
+    id bigint not null auto_increment,
     name varchar(128) not null,
     category_id bigint not null,
     price integer not null,
