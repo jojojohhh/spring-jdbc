@@ -6,12 +6,8 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -49,16 +45,13 @@ public class JdbcProductCategoryRepository implements ProductCategoryRepository{
     }
 
     @Override
-    public Optional<ProductCategory> save(ProductCategory productCategory) {
-        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        jdbcInsert.withTableName("user").usingGeneratedKeyColumns("id");
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("id", productCategory.getId());
-        parameters.put("name", productCategory.getName());
-        if (productCategory.getCategoryParent() != null) parameters.put("category_parent", productCategory.getCategoryParent());
-        Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
-        productCategory.setId(key.longValue());
-        return Optional.of(productCategory);
+    public String save(ProductCategory productCategory) {
+        return jdbcTemplate.update(
+                "INSERT INTO product_category (id, name, category_parent) VALUES (?, ?, ?)",
+                productCategory.getId(),
+                productCategory.getName(),
+                productCategory.getCategoryParent() == null ? null : productCategory.getCategoryParent().getId()
+        ) > 0 ? "success" : "fail";
     }
 
     @Override
