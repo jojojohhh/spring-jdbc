@@ -20,26 +20,25 @@ public class JdbcProductCategoryRepository implements ProductCategoryRepository{
     static RowMapper<ProductCategory> productCategoryRowMapper = (rs, rowNum) -> new ProductCategory(
             rs.getLong("id"),
             rs.getString("name"),
-            new ProductCategory(rs.getLong("category_parent"), rs.getString("parent_name"))
+            rs.getInt("category_parent") != -1 ? new ProductCategory(rs.getLong("category_parent"), rs.getString("parent_name")) : null
     );
 
     @Override
     public Optional<ProductCategory> findById(Long id) throws Exception {
-        return Optional.ofNullable(jdbcTemplate.query(
-                "SELECT CATEGORY.ID AS ID, CATEGORY.NAME AS NAME, CATEGORY.CATEGORY_PARENT AS CATEGORY_PARENT, CATEGORY1.NAME AS PARENT_NAME " +
-                        "FROM PRODUCT_CATEGORY AS CATEGORY, PRODUCT_CATEGORY AS CATEGORY1 " +
-                        "WHERE CATEGORY.ID = ? AND CATEGORY.CATEGORY_PARENT = CATEGORY1.ID",
+        return jdbcTemplate.query(
+                "SELECT CATEGORY.ID AS ID, CATEGORY.NAME AS NAME, IFNULL(CATEGORY.PARENT, -1) AS CATEGORY_PARENT, PARENT.NAME AS PARENT_NAME " +
+                        "FROM PRODUCT_CATEGORY AS CATEGORY LEFT JOIN PRODUCT_CATEGORY AS PARENT ON CATEGORY.PARENT = PARENT.ID " +
+                        "WHERE CATEGORY.ID = ?",
                 productCategoryRowMapper,
                 id
-        ).stream().findAny().orElseThrow(() -> new Exception("exception")));
+        ).stream().findAny();
     }
 
     @Override
     public Stream<ProductCategory> findAll() {
         return jdbcTemplate.query(
-                "SELECT CATEGORY.ID AS ID, CATEGORY.NAME AS NAME, CATEGORY.CATEGORY_PARENT AS CATEGORY_PARENT, CATEGORY1.NAME AS PARENT_NAME " +
-                        "FROM PRODUCT_CATEGORY AS CATEGORY, PRODUCT_CATEGORY AS CATEGORY1 " +
-                        "WHERE CATEGORY.CATEGORY_PARENT = CATEGORY1.ID",
+                "SELECT CATEGORY.ID AS ID, CATEGORY.NAME AS NAME, IFNULL(CATEGORY.PARENT, -1) AS CATEGORY_PARENT, PARENT.NAME AS PARENT_NAME " +
+                        "FROM PRODUCT_CATEGORY AS CATEGORY LEFT JOIN PRODUCT_CATEGORY AS PARENT ON CATEGORY.PARENT = PARENT.ID ",
                 productCategoryRowMapper
         ).stream();
     }
@@ -47,7 +46,7 @@ public class JdbcProductCategoryRepository implements ProductCategoryRepository{
     @Override
     public String save(ProductCategory productCategory) {
         return jdbcTemplate.update(
-                "INSERT INTO product_category (id, name, category_parent) VALUES (?, ?, ?)",
+                "INSERT INTO product_category (id, name, parent) VALUES (?, ?, ?)",
                 productCategory.getId(),
                 productCategory.getName(),
                 productCategory.getCategoryParent() == null ? null : productCategory.getCategoryParent().getId()
@@ -57,9 +56,9 @@ public class JdbcProductCategoryRepository implements ProductCategoryRepository{
     @Override
     public Optional<ProductCategory> findByName(String name) throws Exception {
         return Optional.ofNullable(jdbcTemplate.query(
-                "SELECT CATEGORY.ID AS ID, CATEGORY.NAME AS NAME, CATEGORY.CATEGORY_PARENT AS CATEGORY_PARENT, CATEGORY1.NAME AS PARENT_NAME " +
-                        "FROM PRODUCT_CATEGORY AS CATEGORY, PRODUCT_CATEGORY AS CATEGORY1 " +
-                        "WHERE CATEGORY.NAME = ? AND CATEGORY.CATEGORY_PARENT = CATEGORY1.ID",
+                "SELECT CATEGORY.ID AS ID, CATEGORY.NAME AS NAME, IFNULL(CATEGORY.PARENT, -1) AS CATEGORY_PARENT, PARENT.NAME AS PARENT_NAME " +
+                        "FROM PRODUCT_CATEGORY AS CATEGORY LEFT JOIN PRODUCT_CATEGORY AS PARENT ON CATEGORY.PARENT = PARENT.ID " +
+                        "WHERE CATEGORY.NAME = ?",
                 productCategoryRowMapper,
                 name
         ).stream().findAny().orElseThrow(() -> new Exception("exception")));
