@@ -2,8 +2,9 @@ package com.spring.jdbc.repository;
 
 import com.spring.jdbc.model.Product;
 import com.spring.jdbc.model.ProductCategory;
-import com.spring.jdbc.model.User;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
