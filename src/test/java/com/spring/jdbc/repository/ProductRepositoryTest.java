@@ -37,7 +37,7 @@ public class ProductRepositoryTest {
     }
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws Exception {
         List<String> result = entities()
                 .map(jdbcProductRepository::save)
                 .filter(s -> s.equals("success"))
