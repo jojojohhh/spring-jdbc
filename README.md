@@ -5,9 +5,11 @@
   
   
  ## Environment
-  |구분|구분|
-  |:----:|:---:|
-  |OS|Windows10|
-  |Language|Java|
-  |Framework|SpringBoot 2.4.4|
-  |Database|Mysql|
+  |도구|Version|
+  |:---:|:---:|
+  |Language|Java 1.8|
+  |IDE|IntelliJ IDE|
+  |Framwork|Spring boot 2.4.4|
+  |DB|MySQL 8.0.27|
+  |Build|gradle 7.1|
+  |OS|Window 10|
