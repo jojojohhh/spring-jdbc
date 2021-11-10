@@ -1,10 +1,10 @@
-# spring-jdbc
+## spring-jdbc
 
-## Description
+### Description
   Spring Data JDBC를 이용한 Mysql 데이터 처리 학습을 위한 쇼핑몰 토이 프로젝트
   
   
- ## Environment
+### Environment
   |도구|Version|
   |:---:|:---:|
   |Language|Java 1.8|
