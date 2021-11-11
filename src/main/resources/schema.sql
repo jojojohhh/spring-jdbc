@@ -2,8 +2,8 @@ drop table if exists review;
 drop table if exists order_product;
 drop table if exists `order`;
 drop table if exists cart;
-drop table if exists product_category;
 drop table if exists product;
+drop table if exists product_category;
 drop table if exists user;
 
 create table user(
@@ -95,8 +95,14 @@ insert into product_category(id, name, parent) values (15, 'BAG', 10);
 insert into product_category(id, name, parent) values (16, 'ACCESSORY', 10);
 insert into product_category(id, name, parent) values (17, 'UNDERWEAR', 10);
 insert into product_category(id, name, parent) values (18, 'NEW_ARRIVAL', 10);
+insert into product (name, category_id, price, stock) values ('상의', 11, 50000, 10);
+insert into product (name, category_id, price, stock) values ('바지', 12, 80000, 10);
+insert into product (name, category_id, price, stock) values ('겉옷', 13, 250000, 10);
 insert into product (name, category_id, price, stock) values ('운동화', 14, 200000, 10);
 insert into cart (user_id, product_id) values (1, 1);
+insert into cart (user_id, product_id) values (1, 2);
+insert into cart (user_id, product_id) values (1, 3);
+insert into cart (user_id, product_id) values (1, 4);
 insert into `order` (user_id, amount, shipping_address, recipient, recipient_phone, delivery_charge, order_date) values (1, 200000, '부산광역시 남구 대연동', '조상제', '01012345678', 0, '2021-10-31');
 insert into order_product (order_id, product_id) values (1, 1);
 insert into review (order_id, product_id, title, content, date) values (1, 1, '리뷰제목', '리뷰내용', '2021-10-31');
