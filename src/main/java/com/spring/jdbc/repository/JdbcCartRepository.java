@@ -1,10 +1,7 @@
 package com.spring.jdbc.repository;
 
-import com.spring.jdbc.model.Cart;
-import com.spring.jdbc.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
