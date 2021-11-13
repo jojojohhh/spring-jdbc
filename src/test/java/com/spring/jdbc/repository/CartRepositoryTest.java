@@ -1,5 +1,6 @@
 package com.spring.jdbc.repository;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
@@ -15,4 +16,9 @@ public class CartRepositoryTest {
 
     @Autowired
     private JdbcCartRepository cartRepository;
+
+    @BeforeEach
+    public void setUp() {
+
+    }
 }
