@@ -73,6 +73,16 @@ public class JdbcCartRepository implements CartRepository{
         )).values().stream().findAny();
     }
 
+    @Override
+    public String save(Cart cart) {
+        return jdbcTemplate.update(
+                "INSERT INTO CART(USER_ID, PRODUCT_ID, PRODUCT_QUANTITY) VALUES (?, ?, ?) ",
+                cart.getUser().getId(),
+                cart.getProducts().get(0).getId(),
+                cart.getProductQuantity()
+        ) > 0 ? "success" : "fail";
+    }
+
 //    static RowMapper<Cart> cartRowMapper = (rs, rowNum) -> new Cart(
 //            rs.getLong("id"),
 //            new User(
