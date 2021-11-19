@@ -16,4 +16,8 @@ public class CartService {
     public Optional<Cart> findByUserId(Long id) {
         return cartRepository.findByUserId(id);
     }
+
+    public void save(Cart cart) {
+        cartRepository.save(cart);
+    }
 }
